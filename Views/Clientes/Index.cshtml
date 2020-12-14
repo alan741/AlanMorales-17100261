@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @model PagedList.IPagedList<SpacyWings.Models.Cliente>
+    @using PagedList.Mvc;
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+    <title>@ViewBag.Title = Registro de ventas</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body class="bg-dark text-white">
+    <br />
+    <h5 class="font-italic display-4 text-center">¡ R e g i s t r a  &nbsp; u n  &nbsp; c l i e n t e !</h5>
+    <br />
+    <p>
+        @Html.ActionLink("Agregar cliente", "Create", null, new { @class = "btn btn-outline-light btn-lg btn-block" })
+    </p>
+    <br />
+    <div class="form-group d-flex justify-content-center">
+        @using (Html.BeginForm("Index", "Clientes", FormMethod.Get))
+        {
+            <p>
+                Buscar por el nombre de: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                <input type="submit" value="Filtrar búsqueda" class="btn btn-outline-light" />
+            </p>
+        }
+    </div>
+    <div>
+        <table class="table" id="mitablit">
+            <tr>
+                <th class="text-white font-italic">
+                    @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th class="text-white font-italic">
+                    Apellido
+                </th>
+                <th class="text-white font-italic">
+                    Correo electrónico
+                </th>
+                <th class="text-white font-italic">
+                    Configuraciones del cliente
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-white font-italic">
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td class="text-white font-italic">
+                        @Html.DisplayFor(modelItem => item.Apellido)
+                    </td>
+                    <td class="text-white font-italic">
+                        @Html.DisplayFor(modelItem => item.Correo)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ClienteID }, new { @class = "font-weight-light font-italic btn btn-outline-warning" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ClienteID }, new { @class = "font-weight-light font-italic btn btn-outline-danger" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </div>
+    <div class="form-group">
+        <h5 class="font-italic display-4 text-center">¡ I n f o r m a  &nbsp; a  &nbsp; t u s &nbsp; c l i e n t e s !</h5>
+        <div class="col-md-11 d-flex justify-content-center">
+            <input type="text" style="margin: 10px; width: 700px;" class="form-control bg-dark text-white" id="txtAsunto" name="txtAsunto" placeholder="Asunto del correo" />
+            <input type="text" style="margin: 10px" class="form-control bg-dark text-white" name="txtCuerpo" id="txtCuerpo" placeholder="Cuerpo del correo" />
+        </div>
+        <div class="col-md-11 d-flex justify-content-center">
+            <button type="button" style="margin: 10px" onclick="LoadData()" value="Enviar correo" class="btn btn-outline-success">
+                Enviar correo a tus subsciptores
+            </button>
+        </div>
+    </div>
+    <button type="button" style="margin: 10px" onclick="ExportToExcel()" class="btn btn-outline-success">
+        exportar tabla
+    </button>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @section Scripts
+{
+        <script type="text/javascript">
+
+            function ExportToExcel() {
+                var htmltable = document.getElementById('mitablit');
+                var html = htmltable.outerHTML;
+                window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html));
+            }
+
+            function LoadData() {
+
+                var misdatos = {
+                    "Asunto": document.getElementById("txtAsunto").value,
+                    "Cuerpo": document.getElementById("txtCuerpo").value
+                }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("EnviarCorreos")',
+            data: misdatos,
+            complete: function () {
+                alert("Los correos se están enviando, esta acción demorara unos minutos");
+                document.getElementById("txtCuerpo").value = "";
+                document.getElementById("txtAsunto").value = "";
+            },
+            error: function (ex) {
+            }
+        });
+        return false;
+    }
+        </script>
+    }
+
+</body>
+</html>
+

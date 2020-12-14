@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-expand-lg navbar-dark bg-danger fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggler custom-toggler font-italic" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                    S p i c y  W i n g s <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse" id="navbarTogglerDemo01">
+                @Html.ActionLink("S p i c y  W i n g s", "Index", "Ventas", new { area = "" }, new { @class = "navbar-brand font-italic" })
+                <ul class="navbar-nav mr-auto mt-2 mt-md-0  d-flex">
+                    <li class="nav-item p-2 flex-filltext-white">
+                        @Html.ActionLink("V e n t a s", "Index", "Ventas", null, new { @class = " text-white font-italic" })
+                    </li>
+                    <li class="nav-item p-2 flex-filltext-white">
+                        @Html.ActionLink("P r o d u c t o s", "Index", "Producto", null, new { @class = " text-white font-italic" })
+                    </li>
+                    <li class="nav-item p-2 flex-filltext-white">
+                        @Html.ActionLink("G r á f i c a", "Index", "GraficaVentas", null, new { @class = " text-white font-italic" })
+                    </li>
+                    <li class="nav-item p-2 flex-filltext-white">
+                        @Html.ActionLink("C l i e n t e s", "Index", "Clientes", null, new { @class = " text-white font-italic" })
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Alan Morales Rueda, Ingeniería en Sistemas Computacionales</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

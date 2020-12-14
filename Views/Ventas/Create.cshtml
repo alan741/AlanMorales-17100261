@@ -1,0 +1,154 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    @model SpacyWings.Models.Venta
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+    <title>@ViewBag.Title = Registrar venta</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body class="bg-dark text-white">
+    <br />
+    <h5 class="font-italic display-4 text-center">R e a l i z a  &nbsp; u n a  &nbsp; v e n t a</h5>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div>
+                @Html.Action("ConsultarProductos", "Ventas")
+            </div>
+            <br />
+            <br />
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <br />
+                        <br />
+                        <div class="col-md-10 d-flex justify-content-center">
+                            @Html.LabelFor(model => model.Importe, htmlAttributes: new { @class = "control-label text-center" })
+                        </div>
+                        <div class="col-md-10 d-flex justify-content-center">
+                            @Html.EditorFor(model => model.Importe, new { htmlAttributes = new { @class = "form-control bg-dark text-white", id = "ValorFinal", @readonly = "readonly", style = "margin: 10px;", placeholder = "Precio previo al IVA" } })
+                            @Html.ValidationMessageFor(model => model.Importe, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-10 d-flex justify-content-center">
+                            <input type="text" style="margin: 10px" class="form-control bg-dark text-white" id="IVA" placeholder="Precio final con IVA" readonly />
+                        </div>
+                        <div class="col-md-10 d-flex justify-content-center">
+                            <input type="submit" style="margin: 10px" value="Agregar venta" class="btn btn-outline-success" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6" style="overflow-y: auto; height: 200px;" id="miTabla">
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <br />
+    <div>
+        @Html.ActionLink("Regresar al panel principal", "Index", null, null, new { @class = "font-italic text-white" })
+    </div>
+    <br />
+    <br />
+    <h5 class="font-italic display-4 text-center">G e n e r a  &nbsp; u n a  &nbsp; f a c t u r a </h5>
+    <br />
+    <div class="d-flex justify-content-center">
+        <input type="text" style="margin: 10px" class="form-control bg-dark text-white" id="receptor" placeholder="Nombre receptor" />
+        <input type="text" style="margin: 10px" class="form-control bg-dark text-white" id="RFC" placeholder="RFC" />
+        <input type="text" style="margin: 10px" class="form-control bg-dark text-white" id="Correo" placeholder="Correo" />
+    </div>
+
+    <button class="btn btn-outline-info btn-lg btn-block" onclick="generarFactura()">Generar factura</button>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script>
+        var monto = 0.0;
+        function sumar(valor) {
+            monto += parseFloat(valor.id);
+            document.getElementById("ValorFinal").value = parseFloat(monto).toFixed(2);
+            document.getElementById("IVA").value = parseFloat(monto * 1.16).toFixed(2);
+            document.getElementById("miTabla").innerHTML += `<button type="button" style="margin: 10px" id="` + valor.id + `" name="` + valor.name + `" onclick="quitar(this)" class="btn btn-outline-warning">` + valor.name + `</button>`;
+        }
+
+        function quitar(valor) {
+            valor.parentNode.removeChild(valor);
+            monto = monto - parseFloat(valor.id);
+            if (monto < 0) {
+                monto = 0.0;
+            }
+            document.getElementById("ValorFinal").value = parseFloat(monto).toFixed(2);
+            document.getElementById("IVA").value = parseFloat(monto * 1.16).toFixed(2);
+        }
+
+        function generarFactura() {
+            var cadena = `  <h1 style="Color: blue; font-family: monospace;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; F A C T U R A &nbsp; &nbsp;&nbsp;F I S C A L </h1>
+                                    <h3 style="Color: gray; font-family: monospace; font-size: 20px;">Nombre de la empresa: TastyWings</h3>
+                                    <h3 style="Color: gray; font-family: monospace; font-size: 20px;">RFC emisor: MELM8305281H0</h3>
+                                    <h3 style="Color: gray; font-family: monospace; font-size: 20px;">Dirección emisor: Bajío 6619</h3>
+                                    <h3 style="Color: gray; font-family: monospace; font-size: 20px;">Lugar y hora de emisión: Nuevo Laredo, Tamaulipas, México. A 12:47:00 am.</h3>
+                                    <h3 style="Color: gray; font-family: monospace; font-size: 20px;">Folio Fiscal: 45117A75F1D267S</h3>
+                                    <h3 style="Color: gray; font-family: monospace; font-size: 20px;">No. Serie: 7841225896247864</h3>
+                                    <h1 style="Color: blue; font-family: monospace;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Datos &nbsp; &nbsp; del &nbsp; receptor</h1>
+                                    <h3 style="Color: gray; font-family: monospace; font-size: 20px;">Nombre receptor: `+ document.getElementById("receptor").value + `<h3>
+                                    <h3 style="Color: gray; font-family: monospace; font-size: 20px;">RFC receptor: `+ document.getElementById("RFC").value + `</h3>
+                                    <h3 style="Color: gray; font-family: monospace; font-size: 20px;">Correo electronico receptor: `+ document.getElementById("Correo").value + `</h3>
+                                    <h1 style="Color: blue; font-family: monospace;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  C o n c e p t o s</h1>
+                                    <table style="width:100%">
+                                    <tr>
+                                        <th style="Color: gray; font-family: monospace; font-size: 20px;">Numeración</th>
+                                        <th style="Color: gray; font-family: monospace; font-size: 20px;">Descripción</th>
+                                        <th style="Color: gray; font-family: monospace; font-size: 20px;">Precio unitario</th>
+                                        <th style="Color: gray; font-family: monospace; font-size: 20px;">Cantidad Total</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="Color: gray; font-family: monospace; font-size: 20px;">1</td>
+                                        <td style="Color: gray; font-family: monospace; font-size: 20px;">Servicio de comida rápida</td>
+                                        <td style="Color: gray; font-family: monospace; font-size: 20px;">`+ document.getElementById("ValorFinal").value + `</td>
+                                        <td style="Color: gray; font-family: monospace; font-size: 20px;">`+ document.getElementById("ValorFinal").value + `</td>
+                                    </tr>
+                                    <tr>
+                                        <td>        </td>
+                                        <td>        </td>
+                                        <td>        </td>
+                                        <td>        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="Color: gray; font-family: monospace; font-size: 20px;">Precio antes de IVA</td>
+                                        <td style="Color: blue; font-family: monospace; font-size: 20px;">`+ document.getElementById("ValorFinal").value + `</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td  style="Color: gray; font-family: monospace; font-size: 20px;">Porcentaje de IVA</td>
+                                        <td style="Color: blue; font-family: monospace; font-size: 20px;">16%</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="Color: gray; font-family: monospace; font-size: 20px;">Cantidad final</td>
+                                        <td style="Color: blue; font-family: monospace; font-size: 20px;">`+ document.getElementById("IVA").value + `</td>
+                                    </tr>
+                                    </table>
+`;
+            var vme = window.open("", "", "width=900, height=700");
+            vme.document.write(cadena);
+            vme.document.close();
+            vme.focus();
+            vme.print();
+            vme.close();
+        }
+    </script>
+</body>
+</html>

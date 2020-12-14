@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpacyWings", "SpacyWings.csproj", "{BB05C359-E6AE-4C5E-9B2D-06979834B00F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB05C359-E6AE-4C5E-9B2D-06979834B00F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB05C359-E6AE-4C5E-9B2D-06979834B00F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB05C359-E6AE-4C5E-9B2D-06979834B00F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB05C359-E6AE-4C5E-9B2D-06979834B00F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38777D0B-324D-4C34-9C13-D302761B32CD}
+	EndGlobalSection
+EndGlobal

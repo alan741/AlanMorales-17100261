@@ -1,0 +1,8 @@
+﻿@model IEnumerable<SpacyWings.Models.Producto>
+<div class="d-flex justify-content-center">
+    @foreach (var item in Model)
+    {
+        <button type="button" style="margin: 10px" id="@item.Precio" name="@item.Nombre" onclick="sumar(this)" class="btn btn-outline-light">@item.Nombre</button>
+    }
+</div>
+

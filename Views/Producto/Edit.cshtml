@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @model SpacyWings.Models.Producto
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+    <title>@ViewBag.Title = Editar producto</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body class="bg-dark text-white">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <br />
+        <h5 class="font-italic display-4 text-center">¡ R e c o n f i g u r a  &nbsp; t u  &nbsp; p r o d u c t o !</h5>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ProductoID)
+
+        <br />
+        <br />
+        <div class="form-group d-flex justify-content-center">
+            <div class="col-md-10 d-flex justify-content-center">
+                @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2 text-white font-italic" })
+                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <br />
+        <br />
+        <div class="form-group d-flex justify-content-center">
+            <div class="col-md-10 d-flex justify-content-center">
+                @Html.LabelFor(model => model.Precio, htmlAttributes: new { @class = "control-label col-md-2 text-white font-italic" })
+                @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-12 d-flex justify-content-center">
+                <input type="submit" value="Guardar" style="width:700px;" class="font-weight-light font-italic btn btn-lg btn-outline-warning" />
+            </div>
+        </div>
+    </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+</body>
+</html>
+
+
+

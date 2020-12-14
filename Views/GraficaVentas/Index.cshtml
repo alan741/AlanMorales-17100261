@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @model IEnumerable<SpacyWings.Models.Venta>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+    <title>@ViewBag.Title = Gráfica</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body class="bg-dark text-white">
+    <br />
+    <h5 class="font-italic display-4 text-center">¡ V i s u a l i z a  &nbsp; t u s  &nbsp; v e n t a s !</h5>
+    <br />
+
+    <div id="grafica">
+
+    </div>
+    <button type="button" style="margin-top: 10px" onclick="LoadData()" class="btn btn-outline-light btn-lg btn-block">G e n e r a r  &nbsp; r e s u m e n &nbsp; d e &nbsp; v e n t a s</button>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+
+    @section Scripts
+{
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script type="text/javascript">
+        var cantidadAyer = 0.0;
+        function LoadData() {
+        var cantidad = 0.0;
+
+        $("#tblStudent tbody tr").remove();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getVentas")',
+            dataType: 'json',
+            success: function (data) {
+                var items = '';
+                $.each(data, function (i, item) {
+                    cantidad += item.Importe;
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getVentasAyer")',
+                dataType: 'json',
+                success: function (dataa) {
+                    var items = '';
+                    $.each(dataa, function (i, item) {
+                    cantidadAyer += parseFloat(item.Importe);
+                    });
+                $(function ($) {
+                    $('#grafica').highcharts({
+                        colorType: "black",
+                        title: { text: 'Estadística de ventas' },
+                        xAxis: { categories: ['Ayer', 'Hoy'] },
+                        yAxis: { title: 'Porcentaje %', plotLines: [{ value: 0, width: 1, color: '#ffffff' }] },
+                        legend: { layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0 },
+                        series: [{ type: 'column', name: 'Ventas', data: [cantidadAyer, parseFloat(cantidad)] }
+                        ],
+                        plotOptions: { line: { dataLabels: { enabled: true } } }
+                    });
+                });
+            },
+            error: function (ex) {
+                var r = jQuery.parseJSON(response.responseText);
+                alert("Message: " + r.Message);
+                alert("StackTrace: " + r.StackTrace);
+                alert("ExceptionType: " + r.ExceptionType);
+            }
+        });
+            },
+            error: function (ex) {
+                var r = jQuery.parseJSON(response.responseText);
+                alert("Message: " + r.Message);
+                alert("StackTrace: " + r.StackTrace);
+                alert("ExceptionType: " + r.ExceptionType);
+            }
+        });
+        return false;
+    }
+        </script>
+    }
+
+</body>
+</html>

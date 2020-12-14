@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @model PagedList.IPagedList<SpacyWings.Models.Producto>
+    @using PagedList.Mvc;
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+    <title>@ViewBag.Title = Registro de ventas</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body class="bg-dark text-white">
+    <br />
+    <h5 class="font-italic display-4 text-center">R e g i s t r o  &nbsp; d e  &nbsp; t u s &nbsp; p r o d u c t o s </h5>
+    <br />
+    <p>
+        @Html.ActionLink("¡Agrega otro producto a tu lista!", "Create", null, new { @class = "btn btn-outline-light btn-lg btn-block" })
+    </p>
+    <br />
+    <div class="form-group d-flex justify-content-center">
+        @using (Html.BeginForm("Index", "Producto", FormMethod.Get))
+        {
+            <p>
+                Buscar por el nombre de: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                <input type="submit" value="Filtrar búsqueda" class="btn btn-outline-light" />
+            </p>
+        }
+    </div>
+    <table class="table">
+        <tr>
+            <th class="text-white font-italic">
+                @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th class="text-white font-italic">
+                @Html.ActionLink("Precio", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="text-white font-italic">
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td class="text-white font-italic">
+                    @Html.DisplayFor(modelItem => item.Precio)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductoID }, new { @class = "font-weight-light font-italic btn btn-outline-warning" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductoID }, new { @class = "font-weight-light font-italic btn btn-outline-danger" })
+                </td>
+            </tr>
+        }
+
+    </table>
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+</body>
+</html>

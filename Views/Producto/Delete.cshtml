@@ -1,0 +1,66 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    @model SpacyWings.Models.Producto
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+    <title>@ViewBag.Title = Eliminar producto</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body class="bg-dark text-white">
+    @using (Html.BeginForm())
+    {
+
+        <div class="form-horizontal">
+            <br />
+            <h5 class="font-italic display-4 text-center">¿ E s t á s  &nbsp; s e g u r o  &nbsp; d e &nbsp; e l i m i n a r &nbsp; e l &nbsp; p r o d u c t o ?</h5>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ProductoID)
+
+            <br />
+            <br />
+        </div>
+
+        <div>
+            <div class="d-flex justify-content-center">
+                <h5 class="font-italic font-weight-bold display-5 text-center">@Html.DisplayNameFor(model => model.Nombre):</h5>
+                <h5 class="font-italic text-monospace display-5 text-center">&nbsp; @Html.DisplayFor(model => model.Nombre)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+
+                <br />
+                <h5 class="font-italic font-weight-bold display-5 text-center"> @Html.DisplayNameFor(model => model.Precio):</h5>
+                <h5 class="font-italic text-monospace display-5 text-center">&nbsp; @Html.DisplayFor(model => model.Precio)</h5>
+
+            </div>
+            <br />
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions d-flex justify-content-center">
+                    <input type="submit" value="E l i m i n a r    p r o d u c t o" class="btn btn-lg btn-outline-warning" />
+                </div>
+            }
+            <br />
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Regresar a mis productos", "Index")
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+</body>
+</html>
+
+
+
+
